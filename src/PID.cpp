@@ -20,7 +20,7 @@ PID::PID() {
 
 
 // sets the value for the PID constants
-void PID::set_PID_constants(double p, double i, double d) {
+void PID::set_constants(double p, double i, double d) {
   kp = p;
   ki = i;
   kd = d;
@@ -30,7 +30,7 @@ void PID::set_PID_constants(double p, double i, double d) {
 
 
 // sets the value for the PID constants
-void PID::set_PID_constants(PIDVariables pid_var) {
+void PID::set_constants(PIDConstants pid_var) {
   kp = pid_var.kp;
   ki = pid_var.ki;
   kd = pid_var.kd;
@@ -40,7 +40,7 @@ void PID::set_PID_constants(PIDVariables pid_var) {
 
 
 // sets the value of the target, the max output, the minimum output, and the integral limit
-void PID::set_PID_variables(double target_input, double max_value, double min_value, double integral_lim) {
+void PID::set_variables(double target_input, double max_value, double min_value, double integral_lim) {
   target = target_input;
   max = max_value;
   min = min_value;
@@ -52,10 +52,21 @@ void PID::set_PID_variables(double target_input, double max_value, double min_va
 
 
 // sets the value of the target, the max output, the minimum output, and the integral limit
-void PID::set_PID_target(double target) {
+void PID::set_target(double target) {
   this->target = target;
 }
 
+
+
+void PID::set_error(double error) {
+  this->error = error;
+}
+
+
+
+void PID::set_past_error(double past_error) {
+  this->past_error = past_error;
+}
 
 
 
@@ -84,9 +95,30 @@ double PID::output(double current) {
 }
 
 
+// returns the result of the PID calculations
+double PID::output() {
+  double out;
+  // check if the error is within the intergal limit and if it is, calculate the integral
+  if (fabs(error) < integral_limit) {
+    integral += error;
+  }
+  else {
+    integral = 0;
+  }
+  // calculate the derivative
+  derivative = error - past_error;
+  // calculate the output
+  out = (error * kp) + (integral * ki) + (derivative * kd);
+  // make the output equal to the max value if its bigger, min value if its smaller, and itself if its inbetween
+  out = out > max ? max : out < min ? min : out;
+  // return the output
+  return out;
+}
 
 
-PIDVariables::PIDVariables(double p, double i, double d) {
+
+
+PIDConstants::PIDConstants(double p, double i, double d) {
   kp = p;
   ki = i;
   kd = d;
