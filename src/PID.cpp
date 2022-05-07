@@ -34,6 +34,7 @@ void PID::set_constants(PIDConstants pid_var) {
   kp = pid_var.kp;
   ki = pid_var.ki;
   kd = pid_var.kd;
+  this->integral_limit = pid_var.int_limit;
 }
 
 
@@ -118,8 +119,9 @@ double PID::output() {
 
 
 
-PIDConstants::PIDConstants(double p, double i, double d) {
+PIDConstants::PIDConstants(double p, double i, double d, double int_limit) {
   kp = p;
   ki = i;
   kd = d;
+  this->int_limit = int_limit;
 }

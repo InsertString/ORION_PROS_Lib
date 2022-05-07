@@ -7,7 +7,8 @@ public:
   double kp;
   double ki;
   double kd;
-  PIDConstants(double p, double i, double d);
+  double int_limit;
+  PIDConstants(double p, double i, double d, double int_lilmit);
 };
 
 
