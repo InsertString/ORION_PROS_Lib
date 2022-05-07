@@ -76,6 +76,16 @@ public:
      */
     void set_type(ChassisType type);
 
+    /**
+     * Configures the chassis variables
+     * 
+     * \param wheel_circumfrence
+     *        the circumfrence of the drive wheels in cm
+     * \param gear_ratio
+     *        the gear ratio of the chassis
+     * \param motor_gearbox
+     *        the type of gearbox in the motors
+     */
     void configure_chassis_variables(double wheel_circumfrence, 
                                      double gear_ratio, 
                                      motor_gearset_e motor_gearbox);
@@ -142,10 +152,32 @@ public:
      */
     void set_differential_power(double left, double right);
 
+    /**
+     * resets the encoders of the chassis motors
+     */
     void tare_drive_motors();
 
+    /**
+     * \return the average position of the chassis motors
+     */
     double average_drive_position();
 
+    /**
+     * Moves the chassis in a straight line based on encoder distance
+     * 
+     * \param target
+     *        the distance in cm for the robot to drive
+     * \param forward_constants
+     *        the PID Constants for the drive forward PID
+     * \param turn_constants
+     *        the PID Constants for the drive forward PID
+     * \param max_power
+     *        the max power to apply to the motors from 0 to 127
+     * \param max_runtime
+     *        the max amount of time that the function is allowed to run in milliseconds
+     * \param accuracy
+     *        how close to the target you want the robot to end up
+     */
     void drive_straight(double target, 
                         PIDConstants forward_constants, 
                         PIDConstants turn_constants, 
@@ -153,6 +185,24 @@ public:
                         double max_runtime,
                         double accuracy);
 
+    /**
+     * Moves the chassis to a target point based on the robots global position.
+     * 
+     * NOTE: this function requires odometry for it to work
+     * 
+     * \param target
+     *        the target point as a 2D Vector in cm
+     * \param forward_constants
+     *        the PID Constants for the drive forward PID
+     * \param turn_constants
+     *        the PID Constants for the drive forward PID
+     * \param max_power
+     *        the max power to apply to the motors from 0 to 127
+     * \param max_runtime
+     *        the max amount of time that the function is allowed to run in milliseconds
+     * \param accuracy
+     *        how close to the target you want the robot to end up
+     */
     void drive_to_position(Vector2D target,
                            PIDConstants forward_constants, 
                            PIDConstants turn_constants, 
